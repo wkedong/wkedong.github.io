@@ -366,8 +366,7 @@
                 <span>Spring-Cloud（五）服务网关</span>
         </a>
         <div class="abstract-content">
-            Spring Cloud Zuul
-服务网关是微服务架构中一个不可或缺的部分。通过服务网关统一向外系统提供REST API的过程中，除了具备服务路由、均衡负载功能之外，它还具备了权限控制等功能。Spring Cloud Netflix中的Zuul就担任了这样的一个角色，为微服务架构提供了前门保护的作用，同时将权限控制这些较重的非业务逻辑内容迁移到服务路由层面，使得服务集群主体能够具备更高的可复用性和可测试性。Zuul功能：1.认证2.压力测试3.金丝雀测试4.动态路由5.负载削减6.安全7.静态响应处理8.主动/主动交换管理Zuul的规则引擎允许通过任何JVM语言来编写规则和过滤器, 支...
+            服务网关
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
@@ -398,10 +397,7 @@
                 <span>Spring-Cloud（四）服务容错保护</span>
         </a>
         <div class="abstract-content">
-            服务容错保护Spring Cloud Hystrix
-Spring Cloud Hystrix是基于Netflix的开源框架Hystrix实现的，其目的是为了通过控制那些访问远程系统、服务和第三方的节点，从而对延迟和故障提供强大的容错能力。Hystrix具备了服务降级、服务熔断、线程隔离、请求缓存、请求合并以及服务监控等强大功能断路器类似于我们家里面强电箱里面用到的漏电断路保护器，当服务单元出现故障（类似于电器发生短路），通过断路器的故障监控功能（类似于保险丝），向调用方返回一个错误响应，避免长时间等待，从而避免故障蔓延到整个系统。
-
-当我们调用一个服务出错时，会展示类似以下页面的错误页...
+            服务容错保护
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
@@ -433,10 +429,6 @@ Spring Cloud Hystrix是基于Netflix的开源框架Hystrix实现的，其目的�
         </a>
         <div class="abstract-content">
             服务消费
-在Spring Cloud（一）服务注册与发现中，我们提供了服务提供者的工程项目，既然有服务的提供方，那么如何去消费所提供的服务，SpringCloud中提供了多种方式来实现，该模块主要就介绍了服务消费，内容包含了服务消费（基础），服务消费（Ribbon），服务消费（Feign）。
-
-服务消费（基础）创建一个服务消费者工程，命名为：service-consumer,并在pom.xml中引入依赖：
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
@@ -467,8 +459,7 @@ Spring Cloud Hystrix是基于Netflix的开源框架Hystrix实现的，其目的�
                 <span>Spring-Cloud（二）配置中心</span>
         </a>
         <div class="abstract-content">
-            Spring Cloud Config
-Spring Cloud Config是Spring Cloud团队创建的一个项目，用来为分布式系统中的基础设施和微服务应用提供集中化的外部配置支持，它分为服务端与客户端两个部分。其中服务端也称为分布式配置中心，它是一个独立的微服务应用，用来连接配置仓库并为客户端提供获取配置信息、加密/解密信息等访问接口；而客户端则是微服务架构中的各个微服务应用或基础设施，它们通过指定的配置中心来管理应用资源与业务相关的配置内容，并在启动的时候从配置中心获取和加载配置信息。Spring Cloud Config实现了对服务端和客户端中环境变量和属性配置的抽象映射，...
+            配置中心
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
@@ -499,8 +490,7 @@ Spring Cloud Config是Spring Cloud团队创建的一个项目，用来为分布�
                 <span>Spring-Cloud（一）服务注册与发现</span>
         </a>
         <div class="abstract-content">
-            Spring Cloud
-Spring Cloud是一个基于Spring Boot实现的云应用开发工具，它为基于JVM的云应用开发中的配置管理、服务发现、断路器、智能路由、微代理、控制总线、全局锁、决策竞选、分布式会话和集群状态管理等操作提供了一种简单的开发方式。Spring Cloud包含了多个子项目（针对分布式系统中涉及的多个不同开源产品），比如：Spring Cloud Config、Spring Cloud Netflix、Spring Cloud CloudFoundry、Spring Cloud AWS、Spring Cloud Security、Spring Cloud C...
+            服务注册与发现
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
@@ -761,22 +751,22 @@ Spring Cloud是一个基于Spring Boot实现的云应用开发工具，它为基
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（一）服务注册与发现/">Spring-Cloud（一）服务注册与发现</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
             <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（三）服务消费/">Spring-Cloud（三）服务消费</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（四）服务容错保护/">Spring-Cloud（四）服务容错保护</a>
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（一）服务注册与发现/">Spring-Cloud（一）服务注册与发现</a>
         </li>
     
     
         <li class="archive-post-item">
             <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（二）配置中心/">Spring-Cloud（二）配置中心</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（四）服务容错保护/">Spring-Cloud（四）服务容错保护</a>
         </li>
     
     
