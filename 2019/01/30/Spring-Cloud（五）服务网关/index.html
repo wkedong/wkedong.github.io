@@ -421,19 +421,25 @@ height:50vh;
         <blockquote>
 <p>服务网关是微服务架构中一个不可或缺的部分。<br>通过服务网关统一向外系统提供REST API的过程中，除了具备服务路由、均衡负载功能之外，它还具备了权限控制等功能。<br>Spring Cloud Netflix中的Zuul就担任了这样的一个角色，为微服务架构提供了前门保护的作用，同时将权限控制这些较重的非业务逻辑内容迁移到服务路由层面，使得服务集群主体能够具备更高的可复用性和可测试性。<br>Zuul功能：1.认证2.压力测试3.金丝雀测试4.动态路由5.负载削减6.安全7.静态响应处理8.主动/主动交换管理<br>Zuul的规则引擎允许通过任何JVM语言来编写规则和过滤器, 支持基于Java和Groovy的构建。</p>
 </blockquote>
-<p>现在我们可以构建如下图的一个微服务架构：<br><img src="https://upload-images.jianshu.io/upload_images/6219052-63d7601a3e49edc7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="微服务架构"><br>我们利用Eureka作为所有服务的统一的注册中心，利用Mysql存储的Config Service作为整个架构的配置文件存储。负载均衡的控制，使用了Ribbo和Feign，还引入了熔断保护机制来防止系统的崩溃。<br>接下来我们就需要，对外面调用进行统一网关控制，这就需要使用到我们今天所要介绍的Zuul服务网关。<br>新建一个基础Spring的Maven Moudle工程命名为zuul，引用所需的依赖：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;parent&gt;</span><br><span class="line">    &lt;groupId&gt;com.wkedong.springcloud&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;parent&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">&lt;/parent&gt;</span><br><span class="line"></span><br><span class="line">&lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-cloud-starter-config&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-cloud-starter-zuul&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br><span class="line"></span><br><span class="line">&lt;build&gt;</span><br><span class="line">    &lt;plugins&gt;</span><br><span class="line">        &lt;plugin&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">        &lt;/plugin&gt;</span><br><span class="line">    &lt;/plugins&gt;</span><br><span class="line">&lt;/build&gt;</span><br></pre></td></tr></table></figure></p>
+<p>现在我们可以构建如下图的一个微服务架构：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/6219052-63d7601a3e49edc7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="微服务架构"></p>
+<p>我们利用Eureka作为所有服务的统一的注册中心，利用Mysql存储的Config Service作为整个架构的配置文件存储。负载均衡的控制，使用了Ribbo和Feign，还引入了熔断保护机制来防止系统的崩溃。<br>接下来我们就需要，对外面调用进行统一网关控制，这就需要使用到我们今天所要介绍的Zuul服务网关。<br>新建一个基础Spring的Maven Moudle工程命名为zuul，引用所需的依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;parent&gt;</span><br><span class="line">    &lt;groupId&gt;com.wkedong.springcloud&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;parent&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">&lt;/parent&gt;</span><br><span class="line"></span><br><span class="line">&lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-cloud-starter-config&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-cloud-starter-zuul&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br><span class="line"></span><br><span class="line">&lt;build&gt;</span><br><span class="line">    &lt;plugins&gt;</span><br><span class="line">        &lt;plugin&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">        &lt;/plugin&gt;</span><br><span class="line">    &lt;/plugins&gt;</span><br><span class="line">&lt;/build&gt;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>这里我们只依赖了配置中心和注册中心及zuul的依赖，后续拓展功能所需的功能可以自行添加。</p>
 </blockquote>
-<p>配置文件<code>bootstrap.yml</code>，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">eureka:</span><br><span class="line">  client:</span><br><span class="line">    healthcheck:</span><br><span class="line">      enabled: true #健康检查开启</span><br><span class="line">    serviceUrl:</span><br><span class="line">      defaultZone: http://localhost:6060/eureka/  #注册中心服务地址</span><br><span class="line">server:</span><br><span class="line">  port: 6050  #当前服务端口</span><br><span class="line">spring:</span><br><span class="line">  ## 从配置中心读取文件</span><br><span class="line">  cloud:</span><br><span class="line">    config:</span><br><span class="line">      uri: http://localhost:6010/</span><br><span class="line">      label: master</span><br><span class="line">      profile: dev</span><br><span class="line">      name: zuul</span><br><span class="line">  application:</span><br><span class="line">    name: zuul    #当前服务ID</span><br></pre></td></tr></table></figure></p>
+<p>配置文件<code>bootstrap.yml</code>，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">eureka:</span><br><span class="line">  client:</span><br><span class="line">    healthcheck:</span><br><span class="line">      enabled: true #健康检查开启</span><br><span class="line">    serviceUrl:</span><br><span class="line">      defaultZone: http://localhost:6060/eureka/  #注册中心服务地址</span><br><span class="line">server:</span><br><span class="line">  port: 6050  #当前服务端口</span><br><span class="line">spring:</span><br><span class="line">  ## 从配置中心读取文件</span><br><span class="line">  cloud:</span><br><span class="line">    config:</span><br><span class="line">      uri: http://localhost:6010/</span><br><span class="line">      label: master</span><br><span class="line">      profile: dev</span><br><span class="line">      name: zuul</span><br><span class="line">  application:</span><br><span class="line">    name: zuul    #当前服务ID</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>配置文件中我们配置了<code>service-producer</code>的路由配置，Spring Cloud Zuul通过与Spring Cloud Eureka的整合，实现了对服务实例的自动化维护，具备默认的服务路由功能，即：当我们这里构建的zuul应用启动并注册到eureka之后，服务网关会发现上面我们启动服务，这时候Zuul就会创建两个路由规则。每个路由规则都包含两部分，一部分是外部请求的匹配规则，另一部分是路由的服务ID。</p>
 </blockquote>
-<p>应用的主类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Zuul服务网关</span><br><span class="line"> *</span><br><span class="line"> * @author wkedong</span><br><span class="line"> */</span><br><span class="line">@EnableZuulProxy</span><br><span class="line">@SpringCloudApplication</span><br><span class="line">public class ZuulApplication &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        new SpringApplicationBuilder(ZuulApplication.class).run(args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>应用的主类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Zuul服务网关</span><br><span class="line"> *</span><br><span class="line"> * @author wkedong</span><br><span class="line"> */</span><br><span class="line">@EnableZuulProxy</span><br><span class="line">@SpringCloudApplication</span><br><span class="line">public class ZuulApplication &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        new SpringApplicationBuilder(ZuulApplication.class).run(args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>在主类在加上注解<code>@EnableZuulProxy</code>开启Zuul的功能。</p>
 </blockquote>
-<p>后续我们启动eureka，config，service-producer，zuul，并访问<a href="http://localhost:6050/service-producer/testGet会出现以下页面：" target="_blank" rel="noopener">http://localhost:6050/service-producer/testGet会出现以下页面：</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello, Spring Cloud! My port is 6070 Get info By Mybatis is &#123;&quot;address&quot;:&quot;江苏南京&quot;,&quot;birthday&quot;:&quot;1994-12-21&quot;,&quot;name&quot;:&quot;wkedong&quot;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>后续我们启动eureka，config，service-producer，zuul，并访问<a href="http://localhost:6050/service-producer/testGet会出现以下页面：" target="_blank" rel="noopener">http://localhost:6050/service-producer/testGet会出现以下页面：</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello, Spring Cloud! My port is 6070 Get info By Mybatis is &#123;&quot;address&quot;:&quot;江苏南京&quot;,&quot;birthday&quot;:&quot;1994-12-21&quot;,&quot;name&quot;:&quot;wkedong&quot;&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>文章目录：</p>
 <ul>
@@ -453,13 +459,18 @@ height:50vh;
             <p>原文作者：<a href="https://wkedong.github.io">wkedong</a>
             </p><p>原文链接：<a href="https://wkedong.github.io/2019/01/30/Spring-Cloud（五）服务网关/">https://wkedong.github.io/2019/01/30/Spring-Cloud（五）服务网关/</a>
             </p><p>发表日期：<a href="https://wkedong.github.io/2019/01/30/Spring-Cloud（五）服务网关/">January 30th 2019, 9:09:47 am</a>
-            </p><p>更新日期：<a href="https://wkedong.github.io/2019/01/30/Spring-Cloud（五）服务网关/">January 30th 2019, 9:09:48 am</a>
+            </p><p>更新日期：<a href="https://wkedong.github.io/2019/01/30/Spring-Cloud（五）服务网关/">January 30th 2019, 9:58:52 am</a>
             </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2019/01/30/hello-world/" title="Hello World">
+                    <div class="nextTitle">Hello World</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -698,9 +709,28 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 8
+        Total : 9
         </div>
         <!-- search  -->
         
@@ -720,17 +750,22 @@ top:50vh;
     
     
         <li class="archive-post-item">
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/hello-world/">Hello World</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
             <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/微服务简介/">微服务简介</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（一）服务注册与发现/">Spring-Cloud（一）服务注册与发现</a>
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（三）服务消费/">Spring-Cloud（三）服务消费</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（三）服务消费/">Spring-Cloud（三）服务消费</a>
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（一）服务注册与发现/">Spring-Cloud（一）服务注册与发现</a>
         </li>
     
     
@@ -767,9 +802,9 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="SpringCloud"><span class="iconfont-archer">&#xe606;</span>SpringCloud</span>
     
-        <span class="sidebar-tag-name" data-tags="花"><span class="iconfont-archer">&#xe606;</span>花</span>
-    
         <span class="sidebar-tag-name" data-tags="风"><span class="iconfont-archer">&#xe606;</span>风</span>
+    
+        <span class="sidebar-tag-name" data-tags="花"><span class="iconfont-archer">&#xe606;</span>花</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>

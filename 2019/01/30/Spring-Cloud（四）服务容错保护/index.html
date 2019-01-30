@@ -418,44 +418,57 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <p>##Spring Cloud Hystrix</p>
-<blockquote>
+        <h2 id="Spring-Cloud-Hystrix"><a href="#Spring-Cloud-Hystrix" class="headerlink" title="Spring Cloud Hystrix"></a>Spring Cloud Hystrix</h2><blockquote>
 <p>Spring Cloud Hystrix是基于Netflix的开源框架Hystrix实现的，其目的是为了通过控制那些访问远程系统、服务和第三方的节点，从而对延迟和故障提供强大的容错能力。Hystrix具备了服务降级、服务熔断、线程隔离、请求缓存、请求合并以及服务监控等强大功能<br>断路器类似于我们家里面强电箱里面用到的漏电断路保护器，当服务单元出现故障（类似于电器发生短路），通过断路器的故障监控功能（类似于保险丝），向调用方返回一个错误响应，避免长时间等待，从而避免故障蔓延到整个系统。</p>
 </blockquote>
-<p>当我们调用一个服务出错时，会展示类似以下页面的错误页：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Whitelabel Error Page</span><br><span class="line">This application has no explicit mapping for /error, so you are seeing this as a fallback.</span><br><span class="line"></span><br><span class="line">Thu Jan 24 14:11:27 CST 2019</span><br><span class="line">There was an unexpected error (type=Internal Server Error, status=500).</span><br><span class="line">Index: 1, Size: 0</span><br></pre></td></tr></table></figure></p>
+<p>当我们调用一个服务出错时，会展示类似以下页面的错误页：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Whitelabel Error Page</span><br><span class="line">This application has no explicit mapping for /error, so you are seeing this as a fallback.</span><br><span class="line"></span><br><span class="line">Thu Jan 24 14:11:27 CST 2019</span><br><span class="line">There was an unexpected error (type=Internal Server Error, status=500).</span><br><span class="line">Index: 1, Size: 0</span><br></pre></td></tr></table></figure>
 <p>从而导致整个系统的崩溃，为了维持系统的正常运行，当某一单元出问题时，通过服务容错保护机制，来实现服务的降级和隔离，确保整个系统的正常运行。</p>
-<p>我们将上篇文章中Ribbon的工程拷贝一份改名为<code>service-consumer-ribbon-hystrix</code>，并在其pom文件中加入引用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;spring-cloud-starter-hystrix&lt;/artifactId&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br><span class="line">      &lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;spring-cloud-starter-hystrix-dashboard&lt;/artifactId&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
+<p>我们将上篇文章中Ribbon的工程拷贝一份改名为<code>service-consumer-ribbon-hystrix</code>，并在其pom文件中加入引用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;spring-cloud-starter-hystrix&lt;/artifactId&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br><span class="line">      &lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;spring-cloud-starter-hystrix-dashboard&lt;/artifactId&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>spring-cloud-starter-hystrix-dashboard依赖是开启Hystrix监控面板</p>
 </blockquote>
-<p>配置文件<code>bootstrap.yml</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">eureka:</span><br><span class="line">  client:</span><br><span class="line">    healthcheck:</span><br><span class="line">      enabled: true #健康检查开启</span><br><span class="line">    serviceUrl:</span><br><span class="line">      defaultZone: http://localhost:6060/eureka/  #注册中心服务地址</span><br><span class="line">server:</span><br><span class="line">  port: 7040  #当前服务端口</span><br><span class="line">spring:</span><br><span class="line">  ## 从配置中心读取文件</span><br><span class="line">  cloud:</span><br><span class="line">    config:</span><br><span class="line">      uri: http://localhost:6010/</span><br><span class="line">      label: master</span><br><span class="line">      profile: dev</span><br><span class="line">      name: service-consumer-ribbon-hystrix</span><br><span class="line">  application:</span><br><span class="line">    name: service-consumer-ribbon-hystrix    #当前服务ID</span><br><span class="line">  zipkin:</span><br><span class="line">    base-url: http://localhost:6040 #zipkin服务地址</span><br><span class="line">  sleuth:</span><br><span class="line">    enabled: true #服务追踪开启</span><br></pre></td></tr></table></figure></p>
-<p>工程主类需要加入<code>@EnableCircuitBreaker</code>或<code>@EnableHystrix</code>声明开启断路器服务，加入<code>@EnableHystrixDashboard</code>开启监控面板：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author wkedong</span><br><span class="line"> * 2019/1/5</span><br><span class="line"> * Ribbon</span><br><span class="line"> */</span><br><span class="line">@EnableHystrixDashboard</span><br><span class="line">@EnableCircuitBreaker</span><br><span class="line">@SpringBootApplication</span><br><span class="line">@EnableDiscoveryClient</span><br><span class="line">public class ServiceConsumerRibbonHystrixApplication &#123;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">    @LoadBalanced</span><br><span class="line">    RestTemplate restTemplate() &#123;</span><br><span class="line">        return new RestTemplate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        new SpringApplicationBuilder(ServiceConsumerRibbonHystrixApplication.class).web(true).run(args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>定义一个<code>HystrixController</code>来实现<code>/testHystrix</code>接口：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author wkedong</span><br><span class="line"> * RobbinDemo</span><br><span class="line"> * 2019/1/5</span><br><span class="line"> */</span><br><span class="line">@RestController</span><br><span class="line">public class HystrixController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    HystrixService hystrixService;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/testHystrix&quot;)</span><br><span class="line">    public String testHystrix() &#123;</span><br><span class="line"></span><br><span class="line">        return hystrixService.testHystrix();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>相对应的服务和服务实现类分别如下：<br><code>HystrixService</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author wkedong</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * 2019/1/15</span><br><span class="line"> */</span><br><span class="line">public interface HystrixService &#123;</span><br><span class="line">    String testHystrix();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><code>HystrixServiceImpl</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author wkedong</span><br><span class="line"> * Hystrix</span><br><span class="line"> * 2019/1/15</span><br><span class="line"> */</span><br><span class="line">@Service</span><br><span class="line">public class HystrixServiceImpl implements HystrixService &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    @HystrixCommand(fallbackMethod = &quot;fallback&quot;)</span><br><span class="line">    public String testHystrix() &#123;</span><br><span class="line">        //执行http请求service-producer服务的testHystrix映射地址，返回的数据为字符串类型</span><br><span class="line">        //服务提供者(service-producer服务)的注册服务ID</span><br><span class="line">        //testHystrix ：消费方法</span><br><span class="line">        return restTemplate.getForObject(&quot;http://service-producer/testHystrix&quot;, String.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String fallback() &#123;</span><br><span class="line">        return &quot;service-producer /testHystrix is error&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>配置文件<code>bootstrap.yml</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">eureka:</span><br><span class="line">  client:</span><br><span class="line">    healthcheck:</span><br><span class="line">      enabled: true #健康检查开启</span><br><span class="line">    serviceUrl:</span><br><span class="line">      defaultZone: http://localhost:6060/eureka/  #注册中心服务地址</span><br><span class="line">server:</span><br><span class="line">  port: 7040  #当前服务端口</span><br><span class="line">spring:</span><br><span class="line">  ## 从配置中心读取文件</span><br><span class="line">  cloud:</span><br><span class="line">    config:</span><br><span class="line">      uri: http://localhost:6010/</span><br><span class="line">      label: master</span><br><span class="line">      profile: dev</span><br><span class="line">      name: service-consumer-ribbon-hystrix</span><br><span class="line">  application:</span><br><span class="line">    name: service-consumer-ribbon-hystrix    #当前服务ID</span><br><span class="line">  zipkin:</span><br><span class="line">    base-url: http://localhost:6040 #zipkin服务地址</span><br><span class="line">  sleuth:</span><br><span class="line">    enabled: true #服务追踪开启</span><br></pre></td></tr></table></figure>
+<p>工程主类需要加入<code>@EnableCircuitBreaker</code>或<code>@EnableHystrix</code>声明开启断路器服务，加入<code>@EnableHystrixDashboard</code>开启监控面板：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author wkedong</span><br><span class="line"> * 2019/1/5</span><br><span class="line"> * Ribbon</span><br><span class="line"> */</span><br><span class="line">@EnableHystrixDashboard</span><br><span class="line">@EnableCircuitBreaker</span><br><span class="line">@SpringBootApplication</span><br><span class="line">@EnableDiscoveryClient</span><br><span class="line">public class ServiceConsumerRibbonHystrixApplication &#123;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">    @LoadBalanced</span><br><span class="line">    RestTemplate restTemplate() &#123;</span><br><span class="line">        return new RestTemplate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        new SpringApplicationBuilder(ServiceConsumerRibbonHystrixApplication.class).web(true).run(args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>定义一个<code>HystrixController</code>来实现<code>/testHystrix</code>接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author wkedong</span><br><span class="line"> * RobbinDemo</span><br><span class="line"> * 2019/1/5</span><br><span class="line"> */</span><br><span class="line">@RestController</span><br><span class="line">public class HystrixController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    HystrixService hystrixService;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/testHystrix&quot;)</span><br><span class="line">    public String testHystrix() &#123;</span><br><span class="line"></span><br><span class="line">        return hystrixService.testHystrix();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相对应的服务和服务实现类分别如下：<br><code>HystrixService</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author wkedong</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * 2019/1/15</span><br><span class="line"> */</span><br><span class="line">public interface HystrixService &#123;</span><br><span class="line">    String testHystrix();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>HystrixServiceImpl</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author wkedong</span><br><span class="line"> * Hystrix</span><br><span class="line"> * 2019/1/15</span><br><span class="line"> */</span><br><span class="line">@Service</span><br><span class="line">public class HystrixServiceImpl implements HystrixService &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    @HystrixCommand(fallbackMethod = &quot;fallback&quot;)</span><br><span class="line">    public String testHystrix() &#123;</span><br><span class="line">        //执行http请求service-producer服务的testHystrix映射地址，返回的数据为字符串类型</span><br><span class="line">        //服务提供者(service-producer服务)的注册服务ID</span><br><span class="line">        //testHystrix ：消费方法</span><br><span class="line">        return restTemplate.getForObject(&quot;http://service-producer/testHystrix&quot;, String.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String fallback() &#123;</span><br><span class="line">        return &quot;service-producer /testHystrix is error&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>这里我们在需要进行保护的服务调用方法上添加注解并给于它一个fallback方法的声明<code>@HystrixCommand(fallbackMethod = &quot;fallback&quot;)</code>，确保在该方法调用出错时会自动调用该类中的fallback方法。</p>
 </blockquote>
-<p>工程至此创建完成了，我们分别启动注册中心，配置中心，服务提供方和该工程，<br>直接访问服务提供端<a href="http://localhost:6070/testHystrix会在延迟后出现" target="_blank" rel="noopener">http://localhost:6070/testHystrix会在延迟后出现</a>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello, Spring Cloud! My port is 6070 This is a testHystrix result</span><br></pre></td></tr></table></figure></p>
-<p>访问该工程加了Hystrix保护的<a href="http://localhost:7040/testHystrix出现：" target="_blank" rel="noopener">http://localhost:7040/testHystrix出现：</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service-producer /testHystrix is error</span><br></pre></td></tr></table></figure></p>
+<p>工程至此创建完成了，我们分别启动注册中心，配置中心，服务提供方和该工程，<br>直接访问服务提供端<a href="http://localhost:6070/testHystrix会在延迟后出现" target="_blank" rel="noopener">http://localhost:6070/testHystrix会在延迟后出现</a>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello, Spring Cloud! My port is 6070 This is a testHystrix result</span><br></pre></td></tr></table></figure>
+<p>访问该工程加了Hystrix保护的<a href="http://localhost:7040/testHystrix出现：" target="_blank" rel="noopener">http://localhost:7040/testHystrix出现：</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service-producer /testHystrix is error</span><br></pre></td></tr></table></figure>
 <hr>
 <p>下面介绍下如何查看监控面板，访问<a href="http://localhost:7040/hystrix出现以下页面：![Hystrix" target="_blank" rel="noopener">http://localhost:7040/hystrix出现以下页面：![Hystrix</a> Dashboard.png](<a href="https://upload-images.jianshu.io/upload_images/6219052-2f07c298ab632591.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" target="_blank" rel="noopener">https://upload-images.jianshu.io/upload_images/6219052-2f07c298ab632591.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240</a>)<br>这是Hystrix Dashboard的监控首页，该页面中并没有具体的监控信息。从页面的文字内容中我们可以知道，Hystrix Dashboard共支持三种不同的监控方式，依次为：</p>
 <ul>
 <li>默认的集群监控：通过URL<a href="http://turbine-hostname:port/turbine.stream开启，实现对默认集群的监控。" target="_blank" rel="noopener">http://turbine-hostname:port/turbine.stream开启，实现对默认集群的监控。</a></li>
 <li>指定的集群监控：通过URL<a href="http://turbine-hostname:port/turbine.stream?cluster=[clusterName]开启，实现对clusterName集群的监控。" target="_blank" rel="noopener">http://turbine-hostname:port/turbine.stream?cluster=[clusterName]开启，实现对clusterName集群的监控。</a></li>
-<li>单体应用的监控：通过URL<a href="http://hystrix-app:port/hystrix.stream开启，实现对具体某个服务实例的监控。" target="_blank" rel="noopener">http://hystrix-app:port/hystrix.stream开启，实现对具体某个服务实例的监控。</a><blockquote>
-<p>前两者都对集群的监控，需要整合Turbine才能实现，这里我们先来实现单个服务实例的监控。<br>页面上方还有两个参数:</p>
+<li>单体应用的监控：通过URL<a href="http://hystrix-app:port/hystrix.stream开启，实现对具体某个服务实例的监控。" target="_blank" rel="noopener">http://hystrix-app:port/hystrix.stream开启，实现对具体某个服务实例的监控。</a></li>
+</ul>
+<blockquote>
+<p>前两者都对集群的监控，需要整合Turbine才能实现，这里我们先来实现单个服务实例的监控。</p>
 </blockquote>
-</li>
+<p>页面上方还有两个参数:</p>
+<ul>
 <li><strong>Delay</strong>：该参数用来控制服务器上轮询监控信息的延迟时间，默认为2000毫秒，我们可以通过配置该属性来降低客户端的网络和CPU消耗。</li>
 <li><strong>Title</strong>：该参数对应了上图头部标题Hystrix Stream之后的内容，默认会使用具体监控实例的URL，我们可以通过配置该信息来展示更合适的标题。</li>
 </ul>
-<p>在Hystrix Dashboard的首页输入已启动的服务<a href="http://localhost:7040/hystrix.stream，已启动对“service-consumer-ribbon-hystrix”的监控，点击“Monitor" target="_blank" rel="noopener">http://localhost:7040/hystrix.stream，已启动对“service-consumer-ribbon-hystrix”的监控，点击“Monitor</a> Stream”按钮，出现如下页面:<br><img src="https://upload-images.jianshu.io/upload_images/6219052-b6932c6b393665d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hystrix.stream"></p>
+<p>在Hystrix Dashboard的首页输入已启动的服务<a href="http://localhost:7040/hystrix.stream，已启动对“service-consumer-ribbon-hystrix”的监控，点击“Monitor" target="_blank" rel="noopener">http://localhost:7040/hystrix.stream，已启动对“service-consumer-ribbon-hystrix”的监控，点击“Monitor</a> Stream”按钮，出现如下页面:</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/6219052-b6932c6b393665d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hystrix.stream"></p>
 <ul>
 <li>实心圆：共有两种含义。它通过颜色的变化代表了实例的健康程度，如下图所示，它的健康度从绿色、黄色、橙色、红色递减。该实心圆除了颜色的变化之外，它的大小也会根据实例的请求流量发生变化，流量越大该实心圆就越大。</li>
 <li>曲线：用来记录2分钟内流量的相对变化，我们可以通过它来观察到流量的上升和下降趋势。</li>
 </ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/6219052-5b369e1511f65f47.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="仪表盘参数含义.png"><br>右上角那里的数字颜色对应Success | Short-Circuited | Bad Request | Timeout | Rejected | Failure 的颜色</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/6219052-5b369e1511f65f47.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="仪表盘参数含义.png"></p>
+<p>右上角那里的数字颜色对应Success | Short-Circuited | Bad Request | Timeout | Rejected | Failure 的颜色</p>
 <blockquote>
 <p>文章目录：</p>
 <ul>
@@ -475,7 +488,7 @@ height:50vh;
             <p>原文作者：<a href="https://wkedong.github.io">wkedong</a>
             </p><p>原文链接：<a href="https://wkedong.github.io/2019/01/30/Spring-Cloud（四）服务容错保护/">https://wkedong.github.io/2019/01/30/Spring-Cloud（四）服务容错保护/</a>
             </p><p>发表日期：<a href="https://wkedong.github.io/2019/01/30/Spring-Cloud（四）服务容错保护/">January 30th 2019, 9:09:29 am</a>
-            </p><p>更新日期：<a href="https://wkedong.github.io/2019/01/30/Spring-Cloud（四）服务容错保护/">January 30th 2019, 9:09:32 am</a>
+            </p><p>更新日期：<a href="https://wkedong.github.io/2019/01/30/Spring-Cloud（四）服务容错保护/">January 30th 2019, 9:58:21 am</a>
             </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -620,7 +633,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-Cloud-Hystrix"><span class="toc-number">1.</span> <span class="toc-text">Spring Cloud Hystrix</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -725,9 +738,28 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 8
+        Total : 9
         </div>
         <!-- search  -->
         
@@ -747,17 +779,22 @@ top:50vh;
     
     
         <li class="archive-post-item">
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/hello-world/">Hello World</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
             <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/微服务简介/">微服务简介</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（一）服务注册与发现/">Spring-Cloud（一）服务注册与发现</a>
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（三）服务消费/">Spring-Cloud（三）服务消费</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（三）服务消费/">Spring-Cloud（三）服务消费</a>
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（一）服务注册与发现/">Spring-Cloud（一）服务注册与发现</a>
         </li>
     
     
@@ -794,9 +831,9 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="SpringCloud"><span class="iconfont-archer">&#xe606;</span>SpringCloud</span>
     
-        <span class="sidebar-tag-name" data-tags="花"><span class="iconfont-archer">&#xe606;</span>花</span>
-    
         <span class="sidebar-tag-name" data-tags="风"><span class="iconfont-archer">&#xe606;</span>风</span>
+    
+        <span class="sidebar-tag-name" data-tags="花"><span class="iconfont-archer">&#xe606;</span>花</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
