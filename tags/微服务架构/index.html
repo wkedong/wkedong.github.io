@@ -361,44 +361,194 @@
     
     
     <article class="index-post">
-        <a class="abstract-title" href="/2019/01/29/文句/">
+        <a class="abstract-title" href="/2019/01/30/Spring-Cloud（五）服务网关/">
             
-                <span>文句</span>
+                <span>Spring-Cloud（五）服务网关</span>
         </a>
         <div class="abstract-content">
-            我也曾是冲锋陷阵的战士，
-有天突然来了一个人，抱住我说:
-“卸下铠甲跟我浪迹天涯吧！
-我保护你一辈子。”
-我信了。
-可她捅了我几刀后就离开了。
-我差点死了，
-咬着牙好不容易把铠甲重新穿上了。
-这时候，
-又有人出现了，说了同样的话。
-你说我还该信嘛？
-
-可能真的是因为自己还年轻，还能继续犯错，还想弥补遗憾。
-也可能因为自己在物质上没啥太大追求了，想追求下精神世界的满足。
-所以不论现在做什么决定好像都情有可原，毕竟还有时间去经历。
-不过现在已经开始讨厌自己说了一大堆然后被人拒绝的感觉了。
-
-我是很喜欢你
-但我也只能喜欢到这了
-我再也想不出其他方法来哄你开心
-也不知道该怎样继续喜欢你
-我想我的...
+            
+服务网关是微服务架构中一个不可或缺的部分。通过服务网关统一向外系统提供REST API的过程中，除了具备服务路由、均衡负载功能之外，它还具备了权限控制等功能。Spring Cloud Netflix中的Zuul就担任了这样的一个角色，为微服务架构提供了前门保护的作用，同时将权限控制这些较重的非业务逻辑内容迁移到服务路由层面，使得服务集群主体能够具备更高的可复用性和可测试性。Zuul功能：1.认证2.压力测试3.金丝雀测试4.动态路由5.负载削减6.安全7.静态响应处理8.主动/主动交换管理Zuul的规则引擎允许通过任何JVM语言来编写规则和过滤器, 支持基于Java和Groovy的构建...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
             <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/01/29</span>
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/01/30</span>
             </div>
             <!-- tags  -->
             
             <div class="abstract-tags">
     
-        <a class="post-tag" href="javascript:void(0);" data-tags="自私的话语">自私的话语</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="微服务架构">微服务架构</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="SpringCloud">SpringCloud</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href="/2019/01/30/Spring-Cloud（四）服务容错保护/">
+            
+                <span>Spring-Cloud（四）服务容错保护</span>
+        </a>
+        <div class="abstract-content">
+            ##Spring Cloud Hystrix
+
+Spring Cloud Hystrix是基于Netflix的开源框架Hystrix实现的，其目的是为了通过控制那些访问远程系统、服务和第三方的节点，从而对延迟和故障提供强大的容错能力。Hystrix具备了服务降级、服务熔断、线程隔离、请求缓存、请求合并以及服务监控等强大功能断路器类似于我们家里面强电箱里面用到的漏电断路保护器，当服务单元出现故障（类似于电器发生短路），通过断路器的故障监控功能（类似于保险丝），向调用方返回一个错误响应，避免长时间等待，从而避免故障蔓延到整个系统。
+
+当我们调用一个服务出错时，会展示类似以下页面的错误页：12...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/01/30</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="微服务架构">微服务架构</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="SpringCloud">SpringCloud</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href="/2019/01/30/Spring-Cloud（三）服务消费/">
+            
+                <span>Spring-Cloud（三）服务消费</span>
+        </a>
+        <div class="abstract-content">
+            
+在Spring Cloud（一）服务注册与发现中，我们提供了服务提供者的工程项目，既然有服务的提供方，那么如何去消费所提供的服务，SpringCloud中提供了多种方式来实现，该模块主要就介绍了服务消费，内容包含了服务消费（基础），服务消费（Ribbon），服务消费（Feign）。
+
+##服务消费（基础）创建一个服务消费者工程，命名为：service-consumer。并在pom.xml中引入依赖：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051&l...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/01/30</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="微服务架构">微服务架构</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="SpringCloud">SpringCloud</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href="/2019/01/30/Spring-Cloud（二）配置中心/">
+            
+                <span>Spring-Cloud（二）配置中心</span>
+        </a>
+        <div class="abstract-content">
+            
+Spring Cloud Config是Spring Cloud团队创建的一个项目，用来为分布式系统中的基础设施和微服务应用提供集中化的外部配置支持，它分为服务端与客户端两个部分。其中服务端也称为分布式配置中心，它是一个独立的微服务应用，用来连接配置仓库并为客户端提供获取配置信息、加密/解密信息等访问接口；而客户端则是微服务架构中的各个微服务应用或基础设施，它们通过指定的配置中心来管理应用资源与业务相关的配置内容，并在启动的时候从配置中心获取和加载配置信息。Spring Cloud Config实现了对服务端和客户端中环境变量和属性配置的抽象映射，所以它除了适用于Spring构建的应用...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/01/30</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="微服务架构">微服务架构</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="SpringCloud">SpringCloud</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href="/2019/01/30/Spring-Cloud（一）服务注册与发现/">
+            
+                <span>Spring-Cloud（一）服务注册与发现</span>
+        </a>
+        <div class="abstract-content">
+            #Spring Cloud简介
+
+Spring Cloud是一个基于Spring Boot实现的云应用开发工具，它为基于JVM的云应用开发中的配置管理、服务发现、断路器、智能路由、微代理、控制总线、全局锁、决策竞选、分布式会话和集群状态管理等操作提供了一种简单的开发方式。Spring Cloud包含了多个子项目（针对分布式系统中涉及的多个不同开源产品），比如：Spring Cloud Config、Spring Cloud Netflix、Spring Cloud CloudFoundry、Spring Cloud AWS、Spring Cloud Security、Spring Clo...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/01/30</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="微服务架构">微服务架构</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="SpringCloud">SpringCloud</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href="/2019/01/30/微服务简介/">
+            
+                <span>微服务简介</span>
+        </a>
+        <div class="abstract-content">
+            
+原文是 Martin Flower 于 2014 年 3 月 25 日写的《Microservices》。
+
+##微服务
+“微服务架构（Microservice Architecture）”一词在过去几年里广泛的传播，它用于描述一种设计应用程序的特别方式，作为一套独立可部署的服务。目前，这种架构方式还没有准确的定义，但是在围绕业务能力的组织、自动部署（automated deployment）、端智能（intelligence in the endpoints）、语言和数据的分散控制，却有着某种共同的特征。
+“微服务（Microservices）”——只不过在满大街充斥的软件架构中的一...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/01/30</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class="abstract-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="微服务架构">微服务架构</a>
     
 </div>
             
@@ -522,9 +672,74 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 3
+        Total : 8
         </div>
         <!-- search  -->
         
@@ -544,17 +759,42 @@
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/29</span><a class="archive-post-title" href="/2019/01/29/The last cloud/">The last cloud</a>
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/微服务简介/">微服务简介</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/29</span><a class="archive-post-title" href="/2019/01/29/文句/">文句</a>
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（一）服务注册与发现/">Spring-Cloud（一）服务注册与发现</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/29</span><a class="archive-post-title" href="/2019/01/29/hello-world/">Hello World</a>
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（三）服务消费/">Spring-Cloud（三）服务消费</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（四）服务容错保护/">Spring-Cloud（四）服务容错保护</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（五）服务网关/">Spring-Cloud（五）服务网关</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（二）配置中心/">Spring-Cloud（二）配置中心</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/29</span><a class="archive-post-title" href="/2019/01/29/我也没见过那晚的花/">我也没见过那晚的花</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/29</span><a class="archive-post-title" href="/2019/01/29/我再也没见过那天的风/">我再也没见过那天的风</a>
         </li>
     
     </ul></div>
@@ -562,7 +802,13 @@
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="自私的话语"><span class="iconfont-archer">&#xe606;</span>自私的话语</span>
+        <span class="sidebar-tag-name" data-tags="微服务架构"><span class="iconfont-archer">&#xe606;</span>微服务架构</span>
+    
+        <span class="sidebar-tag-name" data-tags="SpringCloud"><span class="iconfont-archer">&#xe606;</span>SpringCloud</span>
+    
+        <span class="sidebar-tag-name" data-tags="花"><span class="iconfont-archer">&#xe606;</span>花</span>
+    
+        <span class="sidebar-tag-name" data-tags="风"><span class="iconfont-archer">&#xe606;</span>风</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
