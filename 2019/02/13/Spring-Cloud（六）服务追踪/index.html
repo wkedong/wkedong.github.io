@@ -289,7 +289,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">2k</span>阅读时长: <span class="post-count reading-time">8 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">2.1k</span>阅读时长: <span class="post-count reading-time">8 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -419,7 +419,7 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <h1 id="Spring-Cloud-Sleuth"><a href="#Spring-Cloud-Sleuth" class="headerlink" title="Spring Cloud Sleuth"></a>Spring Cloud Sleuth</h1><blockquote>
-<p>Spring Cloud Sleuth 主要功能就是在分布式系统中提供追踪解决方案，并且兼容支持了 zipkin，你只需要在pom文件中引入相应的依赖即可。<br>微服务架构上通过业务来划分服务的，通过REST调用，对外暴露的一个接口，可能需要很多个服务协同才能完成这个接口功能，如果链路上任何一个服务出现问题或者网络超时，都会形成导致接口调用失败。随着业务的不断扩张，服务之间互相调用会越来越复杂。</p>
+<p>Spring Cloud Sleuth 主要功能就是在分布式系统中提供追踪解决方案，并且兼容支持了 zipkin，你只需要在pom文件中引入相应的依赖即可。<br>微服务架构上通过业务来划分服务的，通过REST调用，对外暴露的一个接口，可能需要很多个服务协同才能完成这个接口功能，如果链路上任何一个服务出现问题或者网络超时，都会形成导致接口调用失败。<br>随着业务的不断扩张，服务之间互相调用会越来越复杂。</p>
 </blockquote>
 <h2 id="Spring-Cloud-Sleuth的专业术语："><a href="#Spring-Cloud-Sleuth的专业术语：" class="headerlink" title="Spring Cloud Sleuth的专业术语："></a>Spring Cloud Sleuth的专业术语：</h2><ul>
 <li>Span：基本工作单元，例如，在一个新建的span中发送一个RPC等同于发送一个回应请求给RPC，span通过一个64位ID唯一标识，trace以另一个64位ID表示，span还有其他数据信息，比如摘要、时间戳事件、关键值注释(tags)、span的ID、以及进度ID(通常是IP地址) span在不断的启动和停止，同时记录了时间信息，当你创建了一个span，你必须在未来的某个时刻停止它。</li>
@@ -433,7 +433,7 @@ height:50vh;
 <h2 id="将Span和Trace在一个系统中使用Zipkin注解的过程图形化："><a href="#将Span和Trace在一个系统中使用Zipkin注解的过程图形化：" class="headerlink" title="将Span和Trace在一个系统中使用Zipkin注解的过程图形化："></a>将Span和Trace在一个系统中使用Zipkin注解的过程图形化：</h2><p><img src="https://upload-images.jianshu.io/upload_images/6219052-c4f372b092982edc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Span和Trace图形化"></p>
 <hr>
 <h1 id="Spring-Cloud-Zipkin"><a href="#Spring-Cloud-Zipkin" class="headerlink" title="Spring Cloud Zipkin"></a>Spring Cloud Zipkin</h1><blockquote>
-<p>Spring cloud提供了spring-cloud-sleuth-zipkin来方便集成zipkin实现，Zipkin是Twitter的一个开源项目，它基于Google Dapper实现。我们可以使用它来收集各个服务器上请求链路的跟踪数据，并通过它提供的REST API接口来辅助我们查询跟踪数据以实现对分布式系统的监控程序，从而及时地发现系统中出现的延迟升高问题并找出系统性能瓶颈的根源。除了面向开发的API接口之外，它也提供了方便的UI组件来帮助我们直观的搜索跟踪信息和分析请求链路明细。</p>
+<p>Spring cloud提供了spring-cloud-sleuth-zipkin来方便集成zipkin实现，Zipkin是Twitter的一个开源项目，它基于Google Dapper实现。<br>我们可以使用它来收集各个服务器上请求链路的跟踪数据，并通过它提供的REST API接口来辅助我们查询跟踪数据以实现对分布式系统的监控程序，从而及时地发现系统中出现的延迟升高问题并找出系统性能瓶颈的根源。<br>除了面向开发的API接口之外，它也提供了方便的UI组件来帮助我们直观的搜索跟踪信息和分析请求链路明细。</p>
 </blockquote>
 <p><img src="https://upload-images.jianshu.io/upload_images/6219052-f15d30dcb278aa37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="zipkin-architecture"></p>
 <p>上图展示了Zipkin的基础架构，它主要有4个核心组件构成：</p>
@@ -448,6 +448,7 @@ height:50vh;
 <blockquote>
 <p>这里依赖了zipkin相关的服务和Mysql数据库（zipkin数据存入数据库进行持久化保存）</p>
 </blockquote>
+<p><code>注：需要支持zipkin追踪的应用需要在pom文件里依赖以下内容,这里不一一赘述</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">  &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;spring-cloud-sleuth-zipkin&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">  &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;spring-cloud-starter-sleuth&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
 <p><code>application.yml</code>配置文件如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 6040</span><br><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: zipkin</span><br><span class="line">  datasource:</span><br><span class="line">    url: jdbc:mysql://127.0.0.1:3306/zipkin?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8</span><br><span class="line">    username: root</span><br><span class="line">    password: 123456</span><br><span class="line">    driver-class-name: com.mysql.jdbc.Driver</span><br></pre></td></tr></table></figure></p>
 <p>接下来我们修改应用主类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @author wkedong</span><br><span class="line"> */</span><br><span class="line">@EnableZipkinServer</span><br><span class="line">@SpringBootApplication</span><br><span class="line">public class ZipkinApplication &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(ZipkinApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><code>@EnableZipkinServer</code>注解表示该应用为zipkin服务</p>
@@ -467,7 +468,7 @@ height:50vh;
 <li>第一个值：service-consumer，它记录了应用的名称，也就是application.properties中spring.application.name参数配置的属性。</li>
 <li>第二个值：b97e2da610e3a31a，Spring Cloud Sleuth生成的一个ID，称为Trace ID，它用来标识一条请求链路。一条请求链路中包含一个Trace ID，多个Span ID。</li>
 <li>第三个值：b97e2da610e3a31a，Spring Cloud Sleuth生成的另外一个ID，称为Span ID，它表示一个基本的工作单元，比如：发送一个HTTP请求。</li>
-<li>第四个值：true，表示是否要将该信息输出到Zipkin等服务中来收集和展示。<blockquote>
+<li>第四个值：true，表示是否要将该信息输出到Zipkin等服务中来收集和展示。（这里有些人可能是false，因为在各个应用配置文件中sleuth:sampler:percentage:  #zipkin收集率为配置，未配置的默认值为0.1即10%的收集率，改为1即可100%收集）<blockquote>
 <p>上面四个值中的Trace ID和Span ID是Spring Cloud Sleuth实现分布式服务跟踪的核心。<br>在一次服务请求链路的调用过程中，会保持并传递同一个Trace ID，从而将整个分布于不同微服务进程中的请求跟踪信息串联起来，以上面输出内容为例，service-consumer和service-producer同属于一个前端服务请求来源，所以他们的Trace ID是相同的，处于同一条请求链路中。</p>
 </blockquote>
 </li>
@@ -515,7 +516,7 @@ height:50vh;
             <p>原文作者：<a href="https://wkedong.github.io">wkedong</a>
             </p><p>原文链接：<a href="https://wkedong.github.io/2019/02/13/Spring-Cloud（六）服务追踪/">https://wkedong.github.io/2019/02/13/Spring-Cloud（六）服务追踪/</a>
             </p><p>发表日期：<a href="https://wkedong.github.io/2019/02/13/Spring-Cloud（六）服务追踪/">February 13th 2019, 5:26:58 pm</a>
-            </p><p>更新日期：<a href="https://wkedong.github.io/2019/02/13/Spring-Cloud（六）服务追踪/">February 16th 2019, 11:01:44 am</a>
+            </p><p>更新日期：<a href="https://wkedong.github.io/2019/02/13/Spring-Cloud（六）服务追踪/">February 22nd 2019, 5:32:11 pm</a>
             </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -897,12 +898,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（一）服务注册与发现/">Spring-Cloud（一）服务注册与发现</a>
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（三）服务消费/">Spring-Cloud（三）服务消费</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（三）服务消费/">Spring-Cloud（三）服务消费</a>
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href="/2019/01/30/Spring-Cloud（一）服务注册与发现/">Spring-Cloud（一）服务注册与发现</a>
         </li>
     
     
@@ -917,12 +918,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/29</span><a class="archive-post-title" href="/2019/01/29/我再也没见过那天的风/">我再也没见过那天的风</a>
+            <span class="archive-post-date">01/29</span><a class="archive-post-title" href="/2019/01/29/我也没见过那晚的花/">我也没见过那晚的花</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/29</span><a class="archive-post-title" href="/2019/01/29/我也没见过那晚的花/">我也没见过那晚的花</a>
+            <span class="archive-post-date">01/29</span><a class="archive-post-title" href="/2019/01/29/我再也没见过那天的风/">我再也没见过那天的风</a>
         </li>
     
     </ul></div>
@@ -938,9 +939,9 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="SpringCloud"><span class="iconfont-archer">&#xe606;</span>SpringCloud</span>
     
-        <span class="sidebar-tag-name" data-tags="花"><span class="iconfont-archer">&#xe606;</span>花</span>
-    
         <span class="sidebar-tag-name" data-tags="风"><span class="iconfont-archer">&#xe606;</span>风</span>
+    
+        <span class="sidebar-tag-name" data-tags="花"><span class="iconfont-archer">&#xe606;</span>花</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
